@@ -1,75 +1,49 @@
-# Projeto Next.js + Three.js + R3F + Rapier
+# Visualizador 3D de Carta Holográfica (Next.js + Three.js / R3F)
 
-Aplicação interativa em 3D com física realista em tempo real construída com **Next.js** (App Router), **Three.js**, **React Three Fiber (R3F)**, **@react-three/drei**, **@react-three/rapier** e **Tailwind CSS**.
-
----
-
-## 🚀 Tecnologias Utilizadas
-
-- **[Next.js](https://nextjs.org/)** (v16 App Router com Turbopack)
-- **[React](https://react.dev/)** (v19)
-- **[Three.js](https://threejs.org/)** (Renderização WebGL 3D)
-- **[@react-three/fiber](https://docs.pmnd.rs/react-three-fiber)** (Renderizador declarativo do Three.js para React)
-- **[@react-three/drei](https://github.com/pmndrs/drei)** (Utilitários e controles de câmera como `OrbitControls` e `Grid`)
-- **[@react-three/rapier](https://github.com/pmndrs/react-three-rapier)** (Motor de física 3D em tempo real baseado em WebAssembly/Rust)
-- **[Tailwind CSS](https://tailwindcss.com/)** (Estilização da interface overlay moderna)
+Visualizador interativo em 3D da carta presente em [`EXAMPLE_CARD`](file:///home/eduardolm/Documents/JOTA/EXAMPLE_CARD/), recriada em **Next.js (App Router)** com **React Three Fiber (R3F)**, **Three.js**, **GLSL Shaders**, **Render-to-Texture (FBO)** e **Postprocessing Bloom**.
 
 ---
 
-## 🎮 Funcionalidades da Demonstração
+## 🎴 O que foi implementado
 
-1. **Simulação Física em Tempo Real:**
-   - Gravidade e colisões realistas com coeficientes de atrito e restituição (quique).
-   - Paredes invisíveis e chão sólido na arena.
-   - Hélice giratória cinemática no centro que colide e rebate qualquer objeto.
-2. **Interatividade:**
-   - Clique em qualquer objeto 3D para aplicar um impulso de força para cima e rotação aleatória.
-   - Adicione dinamicamente esferas, cubos e cápsulas, ou use o botão **Chuva (+8)** para disparar múltiplos corpos rígidos.
-   - Alterne o modo **Debug Wireframes** do Rapier para inspecionar os volumes de colisão (*colliders*) e contatos físicos.
-   - Botão de **Reset** para recarregar o estado inicial da arena.
-3. **Controles de Câmera:**
-   - Arraste com o botão esquerdo para orbitar a cena.
-   - Scroll para zoom in / out.
+1. **Frente da Carta Holográfica:**
+   - Shaders GLSL customizados com efeito iridescente/arco-íris e ruído cintilante (*sparkle noise*).
+   - Detecção da janela interna de ilustração.
+   - **Holograma 3D Interno:** Crânio tridimensional (`skull5.obj`) com olhos incandescentes e efeito de fogo procedural (*FBM noise*), renderizado em tempo real via FBO offscreen.
+   - **Efeito Parallax / Lenticular:** O modelo 3D no interior da carta responde à inclinação da carta e do cursor do mouse.
 
----
+2. **Verso da Carta:**
+   - Modo 1: **Holográfico Original** (com o emblema floral e borda iridescente).
+   - Modo 2: **[`CARD_BACK.png`](file:///home/eduardolm/Documents/JOTA/EXAMPLE_CARD/CARD_BACK.png)** texturizado com reflexão e acabamento metálico.
 
-## 📂 Estrutura de Pastas
-
-```text
-src/
-├── app/
-│   ├── layout.tsx         # Configuração HTML, fontes e metadados
-│   ├── page.tsx           # Gerenciamento de estado dos objetos e layout principal
-│   └── globals.css        # Importação do Tailwind CSS
-├── components/
-│   ├── canvas/
-│   │   ├── Experience.tsx      # Cena física R3F (Physics, RigidBody, colliders, spinner e iluminação)
-│   │   ├── Scene.tsx           # Componente Canvas com OrbitControls e Grid
-│   │   └── SceneContainer.tsx  # Dynamic Import (ssr: false) para evitar conflitos de SSR com WebGL
-│   └── dom/
-│       └── UIOverlay.tsx       # Interface HUD/overlay com botões de controle e contador
-```
+3. **Interatividade e Controles:**
+   - **Órbita 3D Livre (360°):** Arraste com o botão esquerdo para inspecionar qualquer ângulo.
+   - **Zoom:** Roda do mouse (*scroll*).
+   - **Inclinação Holográfica:** A carta se inclina suavemente acompanhando o ponteiro do mouse quando estática.
+   - **Botão Virar Carta (180°):** Alterna suavemente entre frente e verso.
+   - **Giro Automático:** Modo vitrine giratório contínuo com flutuação suave.
+   - **Paletas de Cor Holográfica:**
+     - *Roxo Místico*
+     - *Ciano Cyber*
+     - *Fogo Dourado*
+     - *Esmeralda*
+   - **Efeito Glow / Bloom:** Controle de intensidade de brilho pós-processado.
 
 ---
 
-## 🛠️ Como Executar
+## 🚀 Como Executar
 
-### 1. Iniciar o servidor de desenvolvimento:
+### Iniciar o servidor de desenvolvimento:
 
 ```bash
 npm run dev
 ```
 
-Abra [http://localhost:3000](http://localhost:3000) no seu navegador.
+Acesse [http://localhost:3000](http://localhost:3000) no seu navegador.
 
-### 2. Gerar build de produção:
+### Gerar build de produção:
 
 ```bash
 npm run build
-```
-
-### 3. Iniciar em modo de produção:
-
-```bash
 npm start
 ```
