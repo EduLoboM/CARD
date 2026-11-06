@@ -3,7 +3,6 @@
 import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Float } from "@react-three/drei";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import Card3D, { CardColorSettings } from "./Card3D";
 
 interface CardSceneProps {
@@ -12,8 +11,6 @@ interface CardSceneProps {
   holoIntensity: number;
   frameMode: "full_art" | "tcg_frame";
   colors: CardColorSettings;
-  bloomEnabled: boolean;
-  bloomIntensity: number;
 }
 
 export default function CardScene({
@@ -22,8 +19,6 @@ export default function CardScene({
   holoIntensity,
   frameMode,
   colors,
-  bloomEnabled,
-  bloomIntensity,
 }: CardSceneProps) {
   return (
     <div className="relative h-full w-full">
@@ -60,17 +55,6 @@ export default function CardScene({
             maxDistance={45}
             rotateSpeed={0.8}
           />
-
-          {bloomEnabled && (
-            <EffectComposer>
-              <Bloom
-                luminanceThreshold={0.2}
-                luminanceSmoothing={0.85}
-                intensity={bloomIntensity}
-                radius={0.7}
-              />
-            </EffectComposer>
-          )}
         </Suspense>
       </Canvas>
     </div>

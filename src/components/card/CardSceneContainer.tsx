@@ -10,7 +10,7 @@ const CardScene = dynamic(() => import("./CardScene"), {
       <div className="flex flex-col items-center gap-3">
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-sky-500 border-t-transparent" />
         <p className="text-sm font-medium tracking-wide">
-          Carregando texturas e animação 3D da carta...
+          Carregando carta 3D...
         </p>
       </div>
     </div>
@@ -23,8 +23,6 @@ interface CardSceneContainerProps {
   holoIntensity: number;
   frameMode: "full_art" | "tcg_frame";
   colors: CardColorSettings;
-  bloomEnabled: boolean;
-  bloomIntensity: number;
 }
 
 export default function CardSceneContainer(props: CardSceneContainerProps) {

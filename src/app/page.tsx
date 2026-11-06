@@ -11,8 +11,6 @@ export default function Home() {
   const [frameMode, setFrameMode] = useState<"full_art" | "tcg_frame">("full_art");
   const [colors, setColors] = useState<CardColorSettings>(COLOR_PRESETS[0].colors);
   const [holoIntensity, setHoloIntensity] = useState(1.0);
-  const [bloomEnabled, setBloomEnabled] = useState(true);
-  const [bloomIntensity, setBloomIntensity] = useState(0.8);
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-black select-none">
@@ -27,10 +25,6 @@ export default function Home() {
         }
         holoIntensity={holoIntensity}
         onChangeHoloIntensity={(val) => setHoloIntensity(val)}
-        bloomEnabled={bloomEnabled}
-        onToggleBloom={() => setBloomEnabled((prev) => !prev)}
-        bloomIntensity={bloomIntensity}
-        onChangeBloomIntensity={(val) => setBloomIntensity(val)}
         onSelectPreset={(newColors) => setColors(newColors)}
       />
 
@@ -40,8 +34,6 @@ export default function Home() {
         holoIntensity={holoIntensity}
         frameMode={frameMode}
         colors={colors}
-        bloomEnabled={bloomEnabled}
-        bloomIntensity={bloomIntensity}
       />
     </main>
   );
