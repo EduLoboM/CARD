@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { CardColorSettings } from "./Card3D";
 
 const CardScene = dynamic(() => import("./CardScene"), {
   ssr: false,
@@ -9,7 +10,7 @@ const CardScene = dynamic(() => import("./CardScene"), {
       <div className="flex flex-col items-center gap-3">
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-sky-500 border-t-transparent" />
         <p className="text-sm font-medium tracking-wide">
-          Carregando vídeo e textura da carta...
+          Carregando texturas e animação 3D da carta...
         </p>
       </div>
     </div>
@@ -21,6 +22,7 @@ interface CardSceneContainerProps {
   flipped: boolean;
   holoIntensity: number;
   frameMode: "full_art" | "tcg_frame";
+  colors: CardColorSettings;
   bloomEnabled: boolean;
   bloomIntensity: number;
 }

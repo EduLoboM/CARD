@@ -4,13 +4,14 @@ import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Float } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import Card3D from "./Card3D";
+import Card3D, { CardColorSettings } from "./Card3D";
 
 interface CardSceneProps {
   autoRotate: boolean;
   flipped: boolean;
   holoIntensity: number;
   frameMode: "full_art" | "tcg_frame";
+  colors: CardColorSettings;
   bloomEnabled: boolean;
   bloomIntensity: number;
 }
@@ -20,6 +21,7 @@ export default function CardScene({
   flipped,
   holoIntensity,
   frameMode,
+  colors,
   bloomEnabled,
   bloomIntensity,
 }: CardSceneProps) {
@@ -31,11 +33,11 @@ export default function CardScene({
         gl={{ antialias: true, alpha: false }}
       >
         <Suspense fallback={null}>
-          <ambientLight intensity={1.0} />
+          <ambientLight intensity={1.1} />
           <directionalLight position={[6, 12, 16]} intensity={1.5} />
           <directionalLight position={[-6, -12, -16]} intensity={0.8} />
           <pointLight position={[0, 0, 14]} intensity={1.0} color="#38bdf8" />
-          <pointLight position={[0, 0, -14]} intensity={0.8} color="#facc15" />
+          <pointLight position={[0, 0, -14]} intensity={1.0} color="#c084fc" />
 
           <Float
             speed={autoRotate ? 0 : 2}
@@ -47,6 +49,7 @@ export default function CardScene({
               flipped={flipped}
               holoIntensity={holoIntensity}
               frameMode={frameMode}
+              colors={colors}
             />
           </Float>
 

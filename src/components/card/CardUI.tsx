@@ -1,5 +1,42 @@
 "use client";
 
+import { CardColorSettings } from "./Card3D";
+
+export const COLOR_PRESETS: { name: string; colors: CardColorSettings; badgeClass: string }[] = [
+  {
+    name: "Roxo Místico",
+    colors: {
+      border: [197, 81, 245],
+      base: [65, 0, 170],
+    },
+    badgeClass: "from-purple-500 to-indigo-500",
+  },
+  {
+    name: "Ciano Cyber",
+    colors: {
+      border: [6, 182, 212],
+      base: [30, 58, 138],
+    },
+    badgeClass: "from-cyan-400 to-blue-600",
+  },
+  {
+    name: "Fogo Dourado",
+    colors: {
+      border: [251, 146, 60],
+      base: [180, 83, 9],
+    },
+    badgeClass: "from-amber-400 to-red-600",
+  },
+  {
+    name: "Esmeralda",
+    colors: {
+      border: [52, 211, 153],
+      base: [6, 78, 59],
+    },
+    badgeClass: "from-emerald-400 to-teal-700",
+  },
+];
+
 interface CardUIProps {
   autoRotate: boolean;
   onToggleAutoRotate: () => void;
@@ -13,6 +50,7 @@ interface CardUIProps {
   onToggleBloom: () => void;
   bloomIntensity: number;
   onChangeBloomIntensity: (val: number) => void;
+  onSelectPreset: (colors: CardColorSettings) => void;
 }
 
 export default function CardUI({
@@ -28,6 +66,7 @@ export default function CardUI({
   onToggleBloom,
   bloomIntensity,
   onChangeBloomIntensity,
+  onSelectPreset,
 }: CardUIProps) {
   return (
     <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between p-6">
@@ -41,11 +80,13 @@ export default function CardUI({
               } animate-pulse`}
             />
             <h1 className="text-base sm:text-lg font-bold text-white tracking-wide">
-              Carta 3D: {flipped ? "Verso (Bart Simpson)" : "Frente (Animação Anime)"}
+              Carta 3D: {flipped ? "Verso Holográfico (Bart Simpson)" : "Frente (Animação Anime)"}
             </h1>
           </div>
           <p className="mt-1 text-xs text-slate-400">
-            Frente com animação fluida de <code className="text-sky-300">CARD_FRONT.gif</code> e verso com <code className="text-amber-300">CARD_BACK.png</code>
+            {flipped
+              ? "Bart Simpson com profundidade 3D (parallax) e borda holográfica com sparkles"
+              : "Animação fluida da cena anime com acabamento foil iridescente"}
           </p>
         </div>
 
@@ -54,7 +95,7 @@ export default function CardUI({
           <div className="font-semibold text-white mb-1">Controles 3D:</div>
           <ul className="space-y-1 text-slate-400">
             <li>🖱️ <strong className="text-slate-200">Arrastar mouse:</strong> gira a carta em 360°</li>
-            <li>✨ <strong className="text-slate-200">Mover cursor:</strong> reflexo holográfico dinâmico</li>
+            <li>✨ <strong className="text-slate-200">Mover cursor:</strong> inclinação 3D e efeito parallax</li>
             <li>🔍 <strong className="text-slate-200">Scroll:</strong> zoom in / out</li>
           </ul>
         </div>
@@ -62,10 +103,27 @@ export default function CardUI({
 
       {/* Barra de Controles Inferior */}
       <footer className="pointer-events-auto mx-auto flex flex-col items-center gap-3 w-full max-w-3xl">
-        {/* Ajustes de Efeito Holográfico */}
-        <div className="flex flex-wrap items-center justify-center gap-5 rounded-2xl border border-white/10 bg-slate-950/85 px-5 py-2.5 shadow-xl backdrop-blur-md text-xs text-slate-300">
+        {/* Seletor de Paleta Holográfica */}
+        <div className="flex flex-wrap items-center justify-center gap-2 rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-2 shadow-xl backdrop-blur-md">
+          <span className="text-xs font-medium text-slate-400 mr-1">Cor Holográfica:</span>
+          {COLOR_PRESETS.map((preset) => (
+            <button
+              key={preset.name}
+              onClick={() => onSelectPreset(preset.colors)}
+              className="group flex items-center gap-1.5 rounded-xl border border-white/10 bg-slate-900/90 px-3 py-1.5 text-xs text-slate-200 transition hover:border-purple-400 hover:text-white cursor-pointer"
+            >
+              <span
+                className={`h-2.5 w-2.5 rounded-full bg-gradient-to-r ${preset.badgeClass}`}
+              />
+              {preset.name}
+            </button>
+          ))}
+        </div>
+
+        {/* Ajustes de Efeito */}
+        <div className="flex flex-wrap items-center justify-center gap-5 rounded-2xl border border-white/10 bg-slate-950/85 px-5 py-2 shadow-xl backdrop-blur-md text-xs text-slate-300">
           <div className="flex items-center gap-2">
-            <span>✨ Efeito Foil / Brilho:</span>
+            <span>✨ Efeito Foil:</span>
             <input
               type="range"
               min="0"
@@ -107,7 +165,7 @@ export default function CardUI({
             }`}
           >
             <span>🔄</span>
-            {flipped ? "Ver Frente (Animação)" : "Ver Verso (Bart Simpson)"}
+            {flipped ? "Ver Frente (Animação)" : "Ver Verso (Bart Simpson 3D)"}
           </button>
 
           {/* Alternar Moldura */}
@@ -116,7 +174,7 @@ export default function CardUI({
             className="flex items-center gap-1.5 rounded-xl border border-white/15 bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-200 transition hover:bg-slate-700 active:scale-95 cursor-pointer"
           >
             <span>🎴</span>
-            Moldura: {frameMode === "full_art" ? "Full Art" : "Moldura TCG"}
+            Frente: {frameMode === "full_art" ? "Full Art" : "Com Borda TCG"}
           </button>
 
           {/* Rotação Automática */}

@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import CardSceneContainer from "@/components/card/CardSceneContainer";
-import CardUI from "@/components/card/CardUI";
+import CardUI, { COLOR_PRESETS } from "@/components/card/CardUI";
+import { CardColorSettings } from "@/components/card/Card3D";
 
 export default function Home() {
   const [autoRotate, setAutoRotate] = useState(false);
   const [flipped, setFlipped] = useState(false);
   const [frameMode, setFrameMode] = useState<"full_art" | "tcg_frame">("full_art");
+  const [colors, setColors] = useState<CardColorSettings>(COLOR_PRESETS[0].colors);
   const [holoIntensity, setHoloIntensity] = useState(1.0);
   const [bloomEnabled, setBloomEnabled] = useState(true);
   const [bloomIntensity, setBloomIntensity] = useState(0.8);
@@ -29,6 +31,7 @@ export default function Home() {
         onToggleBloom={() => setBloomEnabled((prev) => !prev)}
         bloomIntensity={bloomIntensity}
         onChangeBloomIntensity={(val) => setBloomIntensity(val)}
+        onSelectPreset={(newColors) => setColors(newColors)}
       />
 
       <CardSceneContainer
@@ -36,6 +39,7 @@ export default function Home() {
         flipped={flipped}
         holoIntensity={holoIntensity}
         frameMode={frameMode}
+        colors={colors}
         bloomEnabled={bloomEnabled}
         bloomIntensity={bloomIntensity}
       />
