@@ -2,16 +2,15 @@
 
 import { useState } from "react";
 import CardSceneContainer from "@/components/card/CardSceneContainer";
-import CardUI, { COLOR_PRESETS } from "@/components/card/CardUI";
-import { CardColorSettings } from "@/components/card/Card3D";
+import CardUI from "@/components/card/CardUI";
 
 export default function Home() {
-  const [colors, setColors] = useState<CardColorSettings>(COLOR_PRESETS[0].colors);
-  const [backMode, setBackMode] = useState<"holographic" | "example_png">("holographic");
   const [autoRotate, setAutoRotate] = useState(false);
   const [flipped, setFlipped] = useState(false);
+  const [frameMode, setFrameMode] = useState<"full_art" | "tcg_frame">("full_art");
+  const [holoIntensity, setHoloIntensity] = useState(1.0);
   const [bloomEnabled, setBloomEnabled] = useState(true);
-  const [bloomIntensity, setBloomIntensity] = useState(1.0);
+  const [bloomIntensity, setBloomIntensity] = useState(0.8);
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-black select-none">
@@ -20,12 +19,12 @@ export default function Home() {
         onToggleAutoRotate={() => setAutoRotate((prev) => !prev)}
         flipped={flipped}
         onToggleFlip={() => setFlipped((prev) => !prev)}
-        backMode={backMode}
-        onToggleBackMode={() =>
-          setBackMode((prev) => (prev === "holographic" ? "example_png" : "holographic"))
+        frameMode={frameMode}
+        onToggleFrameMode={() =>
+          setFrameMode((prev) => (prev === "full_art" ? "tcg_frame" : "full_art"))
         }
-        colors={colors}
-        onSelectPreset={(newColors) => setColors(newColors)}
+        holoIntensity={holoIntensity}
+        onChangeHoloIntensity={(val) => setHoloIntensity(val)}
         bloomEnabled={bloomEnabled}
         onToggleBloom={() => setBloomEnabled((prev) => !prev)}
         bloomIntensity={bloomIntensity}
@@ -33,10 +32,10 @@ export default function Home() {
       />
 
       <CardSceneContainer
-        colors={colors}
-        backMode={backMode}
         autoRotate={autoRotate}
         flipped={flipped}
+        holoIntensity={holoIntensity}
+        frameMode={frameMode}
         bloomEnabled={bloomEnabled}
         bloomIntensity={bloomIntensity}
       />

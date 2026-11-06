@@ -1,49 +1,39 @@
-# Visualizador 3D de Carta Holográfica (Next.js + Three.js / R3F)
+# Visualizador 3D de Carta Holográfica
 
-Visualizador interativo em 3D da carta presente em [`EXAMPLE_CARD`](file:///home/eduardolm/Documents/JOTA/EXAMPLE_CARD/), recriada em **Next.js (App Router)** com **React Three Fiber (R3F)**, **Three.js**, **GLSL Shaders**, **Render-to-Texture (FBO)** e **Postprocessing Bloom**.
-
----
-
-## 🎴 O que foi implementado
-
-1. **Frente da Carta Holográfica:**
-   - Shaders GLSL customizados com efeito iridescente/arco-íris e ruído cintilante (*sparkle noise*).
-   - Detecção da janela interna de ilustração.
-   - **Holograma 3D Interno:** Crânio tridimensional (`skull5.obj`) com olhos incandescentes e efeito de fogo procedural (*FBM noise*), renderizado em tempo real via FBO offscreen.
-   - **Efeito Parallax / Lenticular:** O modelo 3D no interior da carta responde à inclinação da carta e do cursor do mouse.
-
-2. **Verso da Carta:**
-   - Modo 1: **Holográfico Original** (com o emblema floral e borda iridescente).
-   - Modo 2: **[`CARD_BACK.png`](file:///home/eduardolm/Documents/JOTA/EXAMPLE_CARD/CARD_BACK.png)** texturizado com reflexão e acabamento metálico.
-
-3. **Interatividade e Controles:**
-   - **Órbita 3D Livre (360°):** Arraste com o botão esquerdo para inspecionar qualquer ângulo.
-   - **Zoom:** Roda do mouse (*scroll*).
-   - **Inclinação Holográfica:** A carta se inclina suavemente acompanhando o ponteiro do mouse quando estática.
-   - **Botão Virar Carta (180°):** Alterna suavemente entre frente e verso.
-   - **Giro Automático:** Modo vitrine giratório contínuo com flutuação suave.
-   - **Paletas de Cor Holográfica:**
-     - *Roxo Místico*
-     - *Ciano Cyber*
-     - *Fogo Dourado*
-     - *Esmeralda*
-   - **Efeito Glow / Bloom:** Controle de intensidade de brilho pós-processado.
+Aplicação interativa em 3D construída com **Next.js (App Router)**, **React Three Fiber (R3F)**, **Three.js**, **GLSL Shaders** e **Postprocessing Bloom**.
 
 ---
 
-## 🚀 Como Executar
+## 🎴 Estrutura da Carta
 
-### Iniciar o servidor de desenvolvimento:
+1. **Frente da Carta (`CARD_FRONT`):**
+   - Reproduz a animação contínua e fluida de [`EXAMPLE_CARD/CARD_FRONT.gif`](file:///home/eduardolm/Documents/JOTA/EXAMPLE_CARD/CARD_FRONT.gif) (otimizada em alta taxa de quadros e sem travamentos).
+   - Acabamento iridescente e reflexivo holográfico (Foil Shader) com partículas de glitter e resposta à luz.
+   - Camada frontal de profundidade em relevo 3D inspirada na mecânica de [`EXAMPLE_CARD/CARD_FRONT/`](file:///home/eduardolm/Documents/JOTA/EXAMPLE_CARD/CARD_FRONT/).
+   - Opção de alternar entre o modo **Full Art** e o modo **Moldura TCG**.
+
+2. **Verso da Carta (`CARD_BACK`):**
+   - Ilustração do **Bart Simpson** de [`EXAMPLE_CARD/CARD_BACK.png`](file:///home/eduardolm/Documents/JOTA/EXAMPLE_CARD/CARD_BACK.png).
+   - Efeito holográfico suave no verso com reflexo cintilante conforme a carta é inclinada.
+
+---
+
+## 🎮 Interatividade
+
+- 🖱️ **Órbita 3D (360°):** Clique e arraste com o botão esquerdo para girar a carta em qualquer direção.
+- 🔍 **Zoom:** Roda do mouse (*scroll*).
+- ✨ **Parallax do Mouse:** A carta inclina-se suavemente acompanhando o cursor do mouse.
+- 🔄 **Virar Carta (180°):** Alterna com transição suave entre a Frente (Animação) e o Verso (Bart Simpson).
+- 🎴 **Modo de Moldura:** Alterna entre *Full Art* e *Moldura TCG*.
+- ⏸️ **Giro 360° Automático:** Modo vitrine contínuo com flutuação gravitacional.
+- ✨ **Controle de Foil e Bloom:** Sliders para controlar a intensidade holográfica e o brilho (*glow*).
+
+---
+
+## 🚀 Como Rodar
 
 ```bash
 npm run dev
 ```
 
-Acesse [http://localhost:3000](http://localhost:3000) no seu navegador.
-
-### Gerar build de produção:
-
-```bash
-npm run build
-npm start
-```
+Abra [http://localhost:3000](http://localhost:3000) no seu navegador.
