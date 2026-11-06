@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { useTexture, useVideoTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { vertCard, fragCardFront, fragCardBack } from "./CardShaders";
+import HearthstoneFrame, { HearthstoneStats } from "./HearthstoneFrame";
 
 export interface CardColorSettings {
   border: [number, number, number];
@@ -15,8 +16,9 @@ interface Card3DProps {
   autoRotate: boolean;
   flipped: boolean;
   holoIntensity: number;
-  frameMode: "full_art" | "tcg_frame";
+  frameMode: "full_art" | "hearthstone";
   colors: CardColorSettings;
+  stats: HearthstoneStats;
 }
 
 export default function Card3D({
@@ -25,6 +27,7 @@ export default function Card3D({
   holoIntensity,
   frameMode,
   colors,
+  stats,
 }: Card3DProps) {
   const cardGroupRef = useRef<THREE.Group>(null);
 
@@ -36,11 +39,11 @@ export default function Card3D({
     playsInline: true,
   });
 
-  // Texturas originais da carta holográfica e imagem do Bart Simpson
+  // Texturas originais e Bart preenchendo 100% da carta
   const textures = useTexture({
     templateFront: "/assets/cardtemplate3.png",
     templateBack: "/assets/cardtemplateback4.png",
-    bartImage: "/card/CARD_BACK.png",
+    bartImage: "/card/bart_full_cover.png",
     noise: "/assets/noise2.png",
     sparkleNoise: "/assets/rgbnoise2.png",
     color: "/assets/color11.png",
@@ -48,7 +51,7 @@ export default function Card3D({
   });
 
   const { frontMaterial, backMaterial } = useMemo(() => {
-    // Face Frontal: Animação anime com acabamento holográfico
+    // Face Frontal: Animação anime com acabamento Hearthstone
     const fMat = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0 },
@@ -67,7 +70,7 @@ export default function Card3D({
       transparent: true,
     });
 
-    // Face Traseira: Bart Simpson dentro da moldura holográfica (gira junto da carta)
+    // Face Traseira: Bart Simpson preenchendo 100% do fundo com a borda holográfica
     const bMat = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0 },
@@ -148,7 +151,10 @@ export default function Card3D({
         <planeGeometry args={[10, 15]} />
       </mesh>
 
-      {/* Face Traseira (Bart Simpson emoldurado pela borda holográfica 3D) */}
+      {/* Interface Hearthstone 3D com Custo, Ataque, Vida e Nome */}
+      <HearthstoneFrame stats={stats} isFullArt={frameMode === "full_art"} />
+
+      {/* Face Traseira (Bart Simpson preenchendo 100% da carta com a Borda Holográfica) */}
       <mesh
         position={[0, 0, -0.02]}
         rotation={[0, Math.PI, 0]}

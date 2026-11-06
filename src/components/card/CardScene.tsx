@@ -4,13 +4,15 @@ import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Float } from "@react-three/drei";
 import Card3D, { CardColorSettings } from "./Card3D";
+import { HearthstoneStats } from "./HearthstoneFrame";
 
 interface CardSceneProps {
   autoRotate: boolean;
   flipped: boolean;
   holoIntensity: number;
-  frameMode: "full_art" | "tcg_frame";
+  frameMode: "full_art" | "hearthstone";
   colors: CardColorSettings;
+  stats: HearthstoneStats;
 }
 
 export default function CardScene({
@@ -19,6 +21,7 @@ export default function CardScene({
   holoIntensity,
   frameMode,
   colors,
+  stats,
 }: CardSceneProps) {
   return (
     <div className="relative h-full w-full">
@@ -28,7 +31,7 @@ export default function CardScene({
         gl={{ antialias: true, alpha: false }}
       >
         <Suspense fallback={null}>
-          <ambientLight intensity={1.1} />
+          <ambientLight intensity={1.2} />
           <directionalLight position={[6, 12, 16]} intensity={1.5} />
           <directionalLight position={[-6, -12, -16]} intensity={0.8} />
           <pointLight position={[0, 0, 14]} intensity={1.0} color="#38bdf8" />
@@ -45,6 +48,7 @@ export default function CardScene({
               holoIntensity={holoIntensity}
               frameMode={frameMode}
               colors={colors}
+              stats={stats}
             />
           </Float>
 
