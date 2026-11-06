@@ -67,7 +67,7 @@ export default function Card3D({
       transparent: true,
     });
 
-    // Face Traseira: Janela fixa para o Bart Simpson com borda holográfica
+    // Face Traseira: Bart Simpson dentro da moldura holográfica (gira junto da carta)
     const bMat = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0 },
@@ -77,7 +77,6 @@ export default function Card3D({
         noise: { value: textures.noise },
         noiseTex: { value: textures.sparkleNoise },
         color: { value: textures.color },
-        resolution: { value: new THREE.Vector2(1000, 1000) },
         holoIntensity: { value: holoIntensity },
         color0: { value: new THREE.Vector3(...colors.border).multiplyScalar(1 / 255) },
         color1: { value: new THREE.Vector3(...colors.base).multiplyScalar(1 / 255) },
@@ -104,10 +103,6 @@ export default function Card3D({
 
     backMaterial.uniforms.time.value = time;
     backMaterial.uniforms.holoIntensity.value = holoIntensity;
-    backMaterial.uniforms.resolution.value.set(
-      state.gl.domElement.width,
-      state.gl.domElement.height
-    );
     backMaterial.uniforms.color0.value.set(
       colors.border[0] / 255,
       colors.border[1] / 255,
@@ -153,7 +148,7 @@ export default function Card3D({
         <planeGeometry args={[10, 15]} />
       </mesh>
 
-      {/* Face Traseira (Janela fixa para o Bart Simpson com Borda Holográfica) */}
+      {/* Face Traseira (Bart Simpson emoldurado pela borda holográfica 3D) */}
       <mesh
         position={[0, 0, -0.02]}
         rotation={[0, Math.PI, 0]}

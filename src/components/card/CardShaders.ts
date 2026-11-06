@@ -101,7 +101,7 @@ export const fragCardFront = /* glsl */ `
   }
 `;
 
-// Shader para o VERSO da carta (Janela fixa para o Bart Simpson + Borda Holográfica)
+// Shader para o VERSO da carta (Bart Simpson que GIRA JUNTO DA CARTA dentro da Borda Holográfica)
 export const fragCardBack = /* glsl */ `
   varying vec2 vUv;
   varying vec3 vWorldNormal;
@@ -116,7 +116,6 @@ export const fragCardBack = /* glsl */ `
   uniform sampler2D color;
   uniform sampler2D noise;
   uniform sampler2D bartTexture;
-  uniform vec2 resolution;
   uniform float time;
   uniform float holoIntensity;
   uniform vec3 color0;
@@ -130,35 +129,34 @@ export const fragCardBack = /* glsl */ `
     vec4 temptex = texture2D(cardtemplate, vUv);
     float f = Fresnel(eyeVector, normalize(vWorldNormal));
 
-    // Janela interna (verde croma original): A carta funciona como uma JANELA fixa para o Bart
+    // Janela interna (área central recortada pela borda holográfica):
     if (temptex.g >= 0.45 && temptex.r < 0.65) {
-      // Projeção em coordenadas de tela: o Bart NÃO gira com a carta!
-      // A carta se move como uma janela através da qual o Bart é visto estático no fundo
-      float minDim = min(resolution.x, resolution.y);
-      vec2 centerOffset = gl_FragCoord.xy - resolution * 0.5;
-      
-      // Enquadramento proporcional do Bart Simpson no centro da visualização
-      vec2 bartUv = (centerOffset / (minDim * 0.55)) + vec2(0.5, 0.48);
+      // O Bart está mapeado diretamente nas coordenadas UV da carta (gira perfeitamente junto da carta em 3D)
+      // Ajuste de proporção para manter o aspecto correto da ilustração do Bart dentro da moldura
+      vec2 bartUv = vUv;
+      bartUv.x = (vUv.x - 0.5) * 1.25 + 0.5;
+      bartUv.y = (vUv.y - 0.5) * 1.02 + 0.5;
 
       vec4 bart;
       if (bartUv.x >= 0.0 && bartUv.x <= 1.0 && bartUv.y >= 0.0 && bartUv.y <= 1.0) {
         bart = texture2D(bartTexture, bartUv);
       } else {
-        // Cor do fundo natural da imagem do Bart (creme claro)
+        // Fundo bege natural da imagem do Bart
         bart = vec4(0.99, 0.98, 0.94, 1.0);
       }
 
-      // Leve brilho de borda e fresnel na janela
-      vec3 finalColor = bart.rgb + f * color0 * 0.3 * holoIntensity;
+      // Brilho holográfico na superfície da carta quando a luz incide
+      vec3 holoSheen = f * color0 * 0.25 * holoIntensity;
+      vec3 finalBart = bart.rgb + holoSheen;
 
-      gl_FragColor = vec4(finalColor, temptex.a);
+      gl_FragColor = vec4(finalBart, temptex.a);
     } else {
-      // Borda holográfica original completa com reflexo e sparkles
+      // Borda holográfica ornamental com reflexo metálico e sparkles
       vec4 bactex = texture2D(backtexture, vUv);
       float tone = pow(clamp(dot(normalize(camPos), normalize(bactex.rgb)), 0.0, 1.0), 1.0);
       vec4 colortex = texture2D(color, vec2(tone, 0.0));
 
-      // Sparkles
+      // Sparkles dinâmicos
       vec2 uvSparkle = vUv;
       float iTime = time * 0.4;
       uvSparkle.y += iTime * 0.05;

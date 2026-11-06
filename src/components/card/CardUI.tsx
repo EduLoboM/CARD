@@ -72,12 +72,12 @@ export default function CardUI({
               } animate-pulse`}
             />
             <h1 className="text-base sm:text-lg font-bold text-white tracking-wide">
-              Carta 3D: {flipped ? "Verso (Janela Estática para o Bart)" : "Frente (Animação Anime)"}
+              Carta 3D: {flipped ? "Verso (Bart Simpson Holográfico)" : "Frente (Animação Anime)"}
             </h1>
           </div>
           <p className="mt-1 text-xs text-slate-400">
             {flipped
-              ? "O Bart fica estático no fundo enquanto a carta orbita como uma janela com borda holográfica"
+              ? "Bart Simpson emoldurado pela borda holográfica 3D original, girando junto da carta"
               : "Animação fluida da cena anime com acabamento foil iridescente"}
           </p>
         </div>
@@ -87,7 +87,7 @@ export default function CardUI({
           <div className="font-semibold text-white mb-1">Controles 3D:</div>
           <ul className="space-y-1 text-slate-400">
             <li>🖱️ <strong className="text-slate-200">Arrastar mouse:</strong> gira a carta em 360°</li>
-            <li>🪟 <strong className="text-slate-200">Verso da carta:</strong> funciona como janela fixa pro Bart</li>
+            <li>✨ <strong className="text-slate-200">Mover cursor:</strong> inclinação 3D e reflexo holográfico</li>
             <li>🔍 <strong className="text-slate-200">Scroll:</strong> zoom in / out</li>
           </ul>
         </div>
@@ -138,7 +138,7 @@ export default function CardUI({
             }`}
           >
             <span>🔄</span>
-            {flipped ? "Ver Frente (Animação)" : "Ver Verso (Janela do Bart)"}
+            {flipped ? "Ver Frente (Animação)" : "Ver Verso (Bart Simpson)"}
           </button>
 
           {/* Alternar Moldura */}
