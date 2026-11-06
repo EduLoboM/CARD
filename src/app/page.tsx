@@ -4,7 +4,7 @@ import { useState } from "react";
 import CardSceneContainer from "@/components/card/CardSceneContainer";
 import CardUI, { COLOR_PRESETS } from "@/components/card/CardUI";
 import { CardColorSettings } from "@/components/card/Card3D";
-import { HearthstoneStats } from "@/components/card/HearthstoneFrame";
+import { HearthstoneStats } from "@/components/card/HearthstoneSVG";
 
 const DEFAULT_STATS: HearthstoneStats = {
   cost: 5,

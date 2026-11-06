@@ -1,7 +1,7 @@
 "use client";
 
 import { CardColorSettings } from "./Card3D";
-import { HearthstoneStats } from "./HearthstoneFrame";
+import { HearthstoneStats } from "./HearthstoneSVG";
 
 export const COLOR_PRESETS: { name: string; colors: CardColorSettings; badgeClass: string }[] = [
   {
@@ -84,14 +84,14 @@ export default function CardUI({
             />
             <h1 className="text-base sm:text-lg font-bold text-white tracking-wide">
               {flipped
-                ? "Verso daCarta:Bart Simpson (Fundo Completo + Moldura)"
-                : "Frente da Carta: Hearthstone Card (3 Valores)"}
+                ? "Verso: Bart Simpson Completo (Sem cortes + Borda)"
+                : "Frente: Hearthstone Card (Borda Vetorial Chapada)"}
             </h1>
           </div>
           <p className="mt-1 text-xs text-slate-400">
             {flipped
-              ? "Bart Simpsonpreenche emoldurado100% peladadepontaaponta, a borda holográfica sobreposta"
-              : "Interface clássica de Hearthstone com Custo de Mana, Ataque, Vida e Retrato de Lacaio"}
+              ? "Bart Simpson preenche todo o fundo com folga e proporção perfeita, emoldurado pela borda holográfica"
+              : "Design plano chapado com o SVG da borda original e os 3 valores: Custo, Ataque e Vida"}
           </p>
         </div>
 

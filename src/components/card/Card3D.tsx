@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useTexture, useVideoTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { vertCard, fragCardFront, fragCardBack } from "./CardShaders";
-import HearthstoneFrame, { HearthstoneStats } from "./HearthstoneFrame";
+import { generateHearthstoneSVG, HearthstoneStats } from "./HearthstoneSVG";
 
 export interface CardColorSettings {
   border: [number, number, number];
@@ -21,6 +21,51 @@ interface Card3DProps {
   stats: HearthstoneStats;
 }
 
+// Borda e Valores Hearthstone 100% Chapados (Flat SVG Overlay na face da carta)
+function FlatHearthstoneOverlay({
+  stats,
+  isFullArt,
+}: {
+  stats: HearthstoneStats;
+  isFullArt: boolean;
+}) {
+  const [texture, setTexture] = useState<THREE.Texture | null>(null);
+
+  useEffect(() => {
+    const svgStr = generateHearthstoneSVG(stats, isFullArt);
+    const blob = new Blob([svgStr], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+
+    img.onload = () => {
+      const tex = new THREE.CanvasTexture(img);
+      tex.needsUpdate = true;
+      setTexture(tex);
+      URL.revokeObjectURL(url);
+    };
+
+    img.src = url;
+
+    return () => {
+      URL.revokeObjectURL(url);
+    };
+  }, [stats.cost, stats.attack, stats.health, stats.title, isFullArt]);
+
+  if (!texture) return null;
+
+  return (
+    <mesh position={[0, 0, 0.022]}>
+      <planeGeometry args={[10, 15]} />
+      <meshBasicMaterial
+        map={texture}
+        transparent
+        alphaTest={0.01}
+        side={THREE.FrontSide}
+      />
+    </mesh>
+  );
+}
+
 export default function Card3D({
   autoRotate,
   flipped,
@@ -31,7 +76,7 @@ export default function Card3D({
 }: Card3DProps) {
   const cardGroupRef = useRef<THREE.Group>(null);
 
-  // Vídeo da animação frontal (CARD_FRONT.gif em MP4 acelerado)
+  // Vídeo da animação frontal (CARD_FRONT.gif acelerado)
   const videoTexture = useVideoTexture("/card/card_front.mp4", {
     muted: true,
     loop: true,
@@ -39,11 +84,11 @@ export default function Card3D({
     playsInline: true,
   });
 
-  // Texturas originais e Bart preenchendo 100% da carta
+  // Texturas e Bart sem nenhum corte (preenchendo a carta com margens seguras)
   const textures = useTexture({
     templateFront: "/assets/cardtemplate3.png",
     templateBack: "/assets/cardtemplateback4.png",
-    bartImage: "/card/bart_full_cover.png",
+    bartImage: "/card/bart_full_perfect.png",
     noise: "/assets/noise2.png",
     sparkleNoise: "/assets/rgbnoise2.png",
     color: "/assets/color11.png",
@@ -51,7 +96,7 @@ export default function Card3D({
   });
 
   const { frontMaterial, backMaterial } = useMemo(() => {
-    // Face Frontal: Animação anime com acabamento Hearthstone
+    // Face Frontal: Animação anime fluida
     const fMat = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0 },
@@ -70,7 +115,7 @@ export default function Card3D({
       transparent: true,
     });
 
-    // Face Traseira: Bart Simpson preenchendo 100% do fundo com a borda holográfica
+    // Face Traseira: Bart Simpson preenchendo 100% da carta + Borda Holográfica
     const bMat = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0 },
@@ -151,10 +196,13 @@ export default function Card3D({
         <planeGeometry args={[10, 15]} />
       </mesh>
 
-      {/* Interface Hearthstone 3D com Custo, Ataque, Vida e Nome */}
-      <HearthstoneFrame stats={stats} isFullArt={frameMode === "full_art"} />
+      {/* Sobreposição 100% Chapada da Borda e Valores Hearthstone (SVG Plano) */}
+      <FlatHearthstoneOverlay
+        stats={stats}
+        isFullArt={frameMode === "full_art"}
+      />
 
-      {/* Face Traseira (Bart Simpson preenchendo 100% da carta com a Borda Holográfica) */}
+      {/* Face Traseira (Bart Simpson completo com borda holográfica) */}
       <mesh
         position={[0, 0, -0.02]}
         rotation={[0, Math.PI, 0]}
@@ -163,7 +211,7 @@ export default function Card3D({
         <planeGeometry args={[10, 15]} />
       </mesh>
 
-      {/* Borda sólida da carta com acabamento chanfrado escuro metálico */}
+      {/* Borda sólida da carta fina e chanfrada metálica */}
       <mesh position={[0, 0, 0]}>
         <boxGeometry args={[10.05, 15.05, 0.038]} />
         <meshStandardMaterial

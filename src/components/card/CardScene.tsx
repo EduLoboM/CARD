@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Float } from "@react-three/drei";
 import Card3D, { CardColorSettings } from "./Card3D";
-import { HearthstoneStats } from "./HearthstoneFrame";
+import { HearthstoneStats } from "./HearthstoneSVG";
 
 interface CardSceneProps {
   autoRotate: boolean;
