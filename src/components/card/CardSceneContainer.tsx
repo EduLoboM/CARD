@@ -1,8 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { CardColorSettings } from "./Card3D";
-import { HearthstoneStats } from "./HearthstoneSVG";
+import { CardColorSettings, CardFrameMode } from "./Card3D";
+import { CardStats } from "./CardHUD";
 
 const CardScene = dynamic(() => import("./CardScene"), {
   ssr: false,
@@ -11,7 +11,7 @@ const CardScene = dynamic(() => import("./CardScene"), {
       <div className="flex flex-col items-center gap-3">
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-amber-500 border-t-transparent" />
         <p className="text-sm font-medium tracking-wide">
-          Carregando Carta Hearthstone...
+          Carregando Carta 3D Holográfica...
         </p>
       </div>
     </div>
@@ -22,9 +22,10 @@ interface CardSceneContainerProps {
   autoRotate: boolean;
   flipped: boolean;
   holoIntensity: number;
-  frameMode: "full_art" | "hearthstone";
+  parallaxStrength: number;
+  frameMode: CardFrameMode;
   colors: CardColorSettings;
-  stats: HearthstoneStats;
+  stats: CardStats;
 }
 
 export default function CardSceneContainer(props: CardSceneContainerProps) {

@@ -3,22 +3,24 @@
 import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Float } from "@react-three/drei";
-import Card3D, { CardColorSettings } from "./Card3D";
-import { HearthstoneStats } from "./HearthstoneSVG";
+import Card3D, { CardColorSettings, CardFrameMode } from "./Card3D";
+import { CardStats } from "./CardHUD";
 
 interface CardSceneProps {
   autoRotate: boolean;
   flipped: boolean;
   holoIntensity: number;
-  frameMode: "full_art" | "hearthstone";
+  parallaxStrength: number;
+  frameMode: CardFrameMode;
   colors: CardColorSettings;
-  stats: HearthstoneStats;
+  stats: CardStats;
 }
 
 export default function CardScene({
   autoRotate,
   flipped,
   holoIntensity,
+  parallaxStrength,
   frameMode,
   colors,
   stats,
@@ -46,6 +48,7 @@ export default function CardScene({
               autoRotate={autoRotate}
               flipped={flipped}
               holoIntensity={holoIntensity}
+              parallaxStrength={parallaxStrength}
               frameMode={frameMode}
               colors={colors}
               stats={stats}
