@@ -1,15 +1,21 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { CardColorSettings, CardFrameMode } from "./Card3D";
-import { CardStats } from "./CardHUD";
+import {
+  CardColorSettings,
+  FrontFrameStyle,
+  BackFrameStyle,
+  HoloEffectType,
+  CardFrameMode,
+  CardStats,
+} from "@/types/card";
 
 const CardScene = dynamic(() => import("./CardScene"), {
   ssr: false,
   loading: () => (
     <div className="flex h-full w-full items-center justify-center bg-black text-slate-300">
       <div className="flex flex-col items-center gap-3">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-amber-500 border-t-transparent" />
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-purple-500 border-t-transparent" />
         <p className="text-sm font-medium tracking-wide">
           Carregando Carta 3D Holográfica...
         </p>
@@ -18,12 +24,15 @@ const CardScene = dynamic(() => import("./CardScene"), {
   ),
 });
 
-interface CardSceneContainerProps {
+export interface CardSceneContainerProps {
   autoRotate: boolean;
   flipped: boolean;
   holoIntensity: number;
   parallaxStrength: number;
-  frameMode: CardFrameMode;
+  frontFrameStyle?: FrontFrameStyle;
+  backFrameStyle?: BackFrameStyle;
+  holoEffect?: HoloEffectType;
+  frameMode?: CardFrameMode;
   colors: CardColorSettings;
   stats: CardStats;
 }

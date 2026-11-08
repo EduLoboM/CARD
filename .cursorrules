@@ -1,0 +1,25 @@
+# Regras de Desenvolvimento para Cursor e Agentes de IA
+
+## Contexto do Projeto
+- Jogo de cartas colecionáveis 3D inspirado em **Plants vs. Zombies Heroes (PvZ Heroes)**.
+- Next.js 16 (App Router) + React Three Fiber + Three.js + GLSL Shaders.
+
+## Comandos Obrigatórios de Validação
+- `npm test`: Executa os testes automatizados do motor de regras PvZ Heroes.
+- `npm run type-check`: Checagem rápida de tipos TypeScript.
+- `npm run build`: Build de produção com Turbopack.
+
+## Regras de Arquitetura e Código
+1. **Regras de Jogo em `src/engine/`**:
+   - Funções puras e determinísticas. Não misturar lógica de jogo com Three.js ou React.
+   - Qualquer nova mecânica (novos traits, feitiços, superpoderes) deve ter teste correspondente em `tests/engine/`.
+2. **Three.js Performance**:
+   - Nunca instanciar `new THREE.*` dentro de `useFrame`. Sempre reutilizar objetos estáticos (zero GC pressure).
+   - Utilizar `useSvgTexture` para carregar ou alternar molduras SVG dinâmicas.
+3. **PvZ Heroes Mechanics**:
+   - 5 pistas: Lane 0 (HEIGHTS, +1 ATK), Lanes 1-3 (GROUND), Lane 4 (WATER, exige Amphibious).
+   - Super-Block Meter com 8 segmentos para bloquear dano direto (exceto contra Bullseye).
+   - Combate resolve pista por pista (0 a 4).
+4. **Convenções de Código**:
+   - TypeScript estrito, sem `any`.
+   - KISS e YAGNI: manter o código direto, sem camadas desnecessárias.

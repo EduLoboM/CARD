@@ -2,25 +2,41 @@
 
 import { useState } from "react";
 import CardSceneContainer from "@/components/card/CardSceneContainer";
-import CardUI, { COLOR_PRESETS } from "@/components/card/CardUI";
-import { CardColorSettings, CardFrameMode } from "@/components/card/Card3D";
-import { CardStats } from "@/components/card/CardHUD";
-
-const DEFAULT_STATS: CardStats = {
-  cost: 5,
-  attack: 13, // O 13 original embutido na borda
-  health: 7,
-  title: "GIRL WARRIORS",
-};
+import CardUI from "@/components/card/CardUI";
+import {
+  CardColorSettings,
+  FrontFrameStyle,
+  BackFrameStyle,
+  HoloEffectType,
+  CardStats,
+} from "@/types/card";
+import { COLOR_PRESETS, DEFAULT_STATS } from "@/constants/card.constants";
 
 export default function Home() {
   const [autoRotate, setAutoRotate] = useState(false);
   const [flipped, setFlipped] = useState(false);
-  const [frameMode, setFrameMode] = useState<CardFrameMode>("original");
+  const [frontFrameStyle, setFrontFrameStyle] = useState<FrontFrameStyle>("simpsons");
+  const [backFrameStyle, setBackFrameStyle] = useState<BackFrameStyle>("simpsons");
+  const [holoEffect, setHoloEffect] = useState<HoloEffectType>("stars");
   const [colors, setColors] = useState<CardColorSettings>(COLOR_PRESETS[0].colors);
   const [holoIntensity, setHoloIntensity] = useState(1.0);
   const [parallaxStrength, setParallaxStrength] = useState(1.2);
   const [stats, setStats] = useState<CardStats>(DEFAULT_STATS);
+
+  // As alterações de borda alteram a frente e o verso simultaneamente
+  const handleFrontFrameStyleChange = (style: FrontFrameStyle) => {
+    setFrontFrameStyle(style);
+    const matchingBack: BackFrameStyle =
+      style === "full_art" ? "minimal" : (style as BackFrameStyle);
+    setBackFrameStyle(matchingBack);
+  };
+
+  const handleBackFrameStyleChange = (style: BackFrameStyle) => {
+    setBackFrameStyle(style);
+    const matchingFront: FrontFrameStyle =
+      style === "original" ? "classic" : (style as FrontFrameStyle);
+    setFrontFrameStyle(matchingFront);
+  };
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-black select-none">
@@ -29,8 +45,12 @@ export default function Home() {
         onToggleAutoRotate={() => setAutoRotate((prev) => !prev)}
         flipped={flipped}
         onToggleFlip={() => setFlipped((prev) => !prev)}
-        frameMode={frameMode}
-        onChangeFrameMode={(mode) => setFrameMode(mode)}
+        frontFrameStyle={frontFrameStyle}
+        onChangeFrontFrameStyle={handleFrontFrameStyleChange}
+        backFrameStyle={backFrameStyle}
+        onChangeBackFrameStyle={handleBackFrameStyleChange}
+        holoEffect={holoEffect}
+        onChangeHoloEffect={(effect) => setHoloEffect(effect)}
         holoIntensity={holoIntensity}
         onChangeHoloIntensity={(val) => setHoloIntensity(val)}
         parallaxStrength={parallaxStrength}
@@ -45,7 +65,9 @@ export default function Home() {
         flipped={flipped}
         holoIntensity={holoIntensity}
         parallaxStrength={parallaxStrength}
-        frameMode={frameMode}
+        frontFrameStyle={frontFrameStyle}
+        backFrameStyle={backFrameStyle}
+        holoEffect={holoEffect}
         colors={colors}
         stats={stats}
       />

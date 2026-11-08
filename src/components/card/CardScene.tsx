@@ -3,15 +3,25 @@
 import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Float } from "@react-three/drei";
-import Card3D, { CardColorSettings, CardFrameMode } from "./Card3D";
-import { CardStats } from "./CardHUD";
+import Card3D from "./Card3D";
+import {
+  CardColorSettings,
+  FrontFrameStyle,
+  BackFrameStyle,
+  HoloEffectType,
+  CardFrameMode,
+  CardStats,
+} from "@/types/card";
 
-interface CardSceneProps {
+export interface CardSceneProps {
   autoRotate: boolean;
   flipped: boolean;
   holoIntensity: number;
   parallaxStrength: number;
-  frameMode: CardFrameMode;
+  frontFrameStyle?: FrontFrameStyle;
+  backFrameStyle?: BackFrameStyle;
+  holoEffect?: HoloEffectType;
+  frameMode?: CardFrameMode;
   colors: CardColorSettings;
   stats: CardStats;
 }
@@ -21,10 +31,15 @@ export default function CardScene({
   flipped,
   holoIntensity,
   parallaxStrength,
+  frontFrameStyle = "simpsons",
+  backFrameStyle = "simpsons",
+  holoEffect = "stars",
   frameMode,
   colors,
   stats,
 }: CardSceneProps) {
+  const activeFrontStyle: FrontFrameStyle = frameMode || frontFrameStyle;
+
   return (
     <div className="relative h-full w-full">
       <Canvas
@@ -49,7 +64,9 @@ export default function CardScene({
               flipped={flipped}
               holoIntensity={holoIntensity}
               parallaxStrength={parallaxStrength}
-              frameMode={frameMode}
+              frontFrameStyle={activeFrontStyle}
+              backFrameStyle={backFrameStyle}
+              holoEffect={holoEffect}
               colors={colors}
               stats={stats}
             />
